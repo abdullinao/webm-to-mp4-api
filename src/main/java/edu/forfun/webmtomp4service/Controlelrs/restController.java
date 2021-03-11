@@ -20,16 +20,27 @@ import java.util.Base64;
 public class restController {
 
     @GetMapping(value = "/getfile/{urlInB64}")
-    public void getImageAsByteArray(HttpServletResponse response, @PathVariable(required = false) String urlInB64) throws IOException {
+    public void getImageAsByteArray(HttpServletResponse response, @PathVariable(required = false) String urlInB64) throws IOException, InterruptedException {
 
         URL url = new URL(new String(Base64.getDecoder().decode(urlInB64)));
-
+//ffmpeg -i videos\ToConvert\1.webm -strict experimental -vf "crop=trunc(iw/2)*2:trunc(ih/2)*2"   videos\Converted\video.mp4
         ReadableByteChannel rbc = Channels.newChannel(url.openStream());
         String fileName = url.toString().substring(url.toString().lastIndexOf("/") + 1);
-        FileOutputStream fos = new FileOutputStream("videos/ToConvert/" + fileName);//+ ".mp4"
+        FileOutputStream fos = new FileOutputStream("F:\\converterApi\\tocon\\" + fileName);//+ ".mp4"
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
         fos.close();
-        InputStream in = new FileInputStream("videos/Converted/" + fileName);
+
+        // C:\ffmpeg\bin
+//        String[] cmd = {"C:\\ffmpeg\\bin\\ffmpeg", "-i", "F:\\converterApi\\tocon\\" + fileName,
+//                " -strict experimental -vf \"crop=trunc(iw/2)*2:trunc(ih/2)*2\" ",
+//                "F:\\converterApi\\tosend\\" + fileName + ".mp4"};
+//        Runtime.getRuntime().exec(cmd);
+
+        Runtime.getRuntime().exec("C:\\ffmpeg\\bin\\ffmpeg -i F://converterApi/tocon/" + fileName +
+                " -strict experimental -vf \"crop=trunc(iw/2)*2:trunc(ih/2)*2\" " +
+                "  F://converterApi/tosend/" + fileName + ".mp4");
+        Thread.sleep(5000);
+        InputStream in = new FileInputStream("F:\\converterApi\\tosend\\" + fileName+ ".mp4");
         response.setContentType(MediaType.ALL_VALUE);
         IOUtils.copy(in, response.getOutputStream());
     }
