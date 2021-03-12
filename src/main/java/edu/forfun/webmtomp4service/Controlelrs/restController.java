@@ -38,12 +38,17 @@ public class restController {
 //                "F:\\converterApi\\tosend\\" + fileName + ".mp4"};
 //        Runtime.getRuntime().exec(cmd);
 ////
-    Runtime.getRuntime().exec("C:\\ffmpeg\\bin\\ffmpeg -i F://converterApi/tocon/" + fileName +
-                 " -strict experimental -vf \"crop=trunc(iw/2)*2:trunc(ih/2)*2\" " +                      //workiing
-                 "  F://converterApi/tosend/" + fileName + ".mp4");
+//    Runtime.getRuntime().exec("C:\\ffmpeg\\bin\\ffmpeg -i F://converterApi/tocon/" + fileName +
+//                 " -strict experimental -vf \"crop=trunc(iw/2)*2:trunc(ih/2)*2\" " +                      //workiing
+//                 "  F://converterApi/tosend/" + fileName + ".mp4");
+
+        Process p = Runtime.getRuntime().exec("cmd /c  start /wait  C:\\convert.bat " + fileName);
 
 
-
+        System.out.println("Waiting for batch file ...");
+        p.waitFor();
+        System.out.println("Batch file done.");
+//Thread.sleep(5000);
 //        System.out.println("1");
 //
 //        System.out.println("2");
@@ -73,7 +78,7 @@ public class restController {
 //            System.out.println(inStreamReader.readLine());
 //        }
 
- 
+
         InputStream in = new FileInputStream("F:\\converterApi\\tosend\\" + fileName+ ".mp4");
         response.setContentType(MediaType.ALL_VALUE);
         IOUtils.copy(in, response.getOutputStream());
