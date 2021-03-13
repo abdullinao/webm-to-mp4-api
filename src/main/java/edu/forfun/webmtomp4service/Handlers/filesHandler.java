@@ -10,11 +10,6 @@ import java.nio.file.Paths;
 public class filesHandler {
 
 
-    public void deleteFiles() {
-
-    }
-
-
     public static void checkFolder() {
         File videos2convert = new File("videos/toconvert");
         File videos2upload = new File("videos/toupload");
@@ -22,10 +17,6 @@ public class filesHandler {
             videos2convert.mkdirs();
             videos2upload.mkdirs();
         }
-
     }
-
-
-
 
 }
